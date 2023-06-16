@@ -1,125 +1,17 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
+실행파일 21912057.exe 실행하시면됩니다
 
-#define BUF_SIZE 30
-void error_handling(char *message);
 
-int main(int argc, char *argv[])
-{
-	int sock;
-	char message[BUF_SIZE];
-	int str_len;
-	socklen_t adr_sz;
-	
-	struct sockaddr_in serv_adr, from_adr;
-	if(argc!=3){
-		printf("Usage : %s <IP> <port>\n", argv[0]);
-		exit(1);
-	}
-	
-	sock=socket(PF_INET, SOCK_DGRAM, 0);   
-	if(sock==-1)
-		error_handling("socket() error");
-	
-	memset(&serv_adr, 0, sizeof(serv_adr));
-	serv_adr.sin_family=AF_INET;
-	serv_adr.sin_addr.s_addr=inet_addr(argv[1]);
-	serv_adr.sin_port=htons(atoi(argv[2]));
-	
-	while(1)
-	{
-		fputs("Insert message(q to quit): ", stdout);
-		fgets(message, sizeof(message), stdin);     
-		if(!strcmp(message,"q\n") || !strcmp(message,"Q\n"))	
-			break;
-		
-		sendto(sock, message, strlen(message), 0, 
-					(struct sockaddr*)&serv_adr, sizeof(serv_adr));
-		adr_sz=sizeof(from_adr);
-		str_len=recvfrom(sock, message, BUF_SIZE, 0, 
-					(struct sockaddr*)&from_adr, &adr_sz);
+만약 안될경우 이클립스 들어가서 import -> exsting projercts into workspace   골라 넣고 finish 한후 실행하시면됩니다.
 
-		message[str_len]=0;
-		printf("Message from server: %s", message);
-	}	
-	close(sock);
-	return 0;
-}
 
-void error_handling(char *message)
-{
-	fputs(message, stderr);
-	fputc('\n', stderr);
-	exit(1);
-  }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
- #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
+기능 
+1. 요금정보 클릭 = 요금정보 확인가능
+2. 불편사항 작성 클릭= 불편사항 작성가능
+3. 좌석현황 클릭= 좌석 현황을 볼수 있습니다.
+4. 관리자 로그인 클릭= 비밀번호 치라고 나옵니다 (비밀번호는 1234 입니다)
+	4-1  요금정보 수정 클릭 = 요금 정보를 수정할수 있습니다( 모든 요금 정보를 적어야함)
+	4-1-1 바꾼 요금 정보는 홈에서 요금정보를 클릭할시 바뀐 요금정보를 확인할수 있습니다
 
-#define BUF_SIZE 30
-void error_handling(char *message);
+	4-2 불편 사항 보기를 누르면 2에서 적은 불편사항을 읽어볼수 있습니다.
 
-int main(int argc, char *argv[])
-{
-	int serv_sock;
-	char message[BUF_SIZE];
-	int str_len;
-	socklen_t clnt_adr_sz;
-	
-	struct sockaddr_in serv_adr, clnt_adr;
-	if(argc!=2){
-		printf("Usage : %s <port>\n", argv[0]);
-		exit(1);
-	}
-	
-	serv_sock=socket(PF_INET, SOCK_DGRAM, 0);
-	if(serv_sock==-1)
-		error_handling("UDP socket creation error");
-	
-	memset(&serv_adr, 0, sizeof(serv_adr));
-	serv_adr.sin_family=AF_INET;
-	serv_adr.sin_addr.s_addr=htonl(INADDR_ANY);
-	serv_adr.sin_port=htons(atoi(argv[1]));
-	
-	if(bind(serv_sock, (struct sockaddr*)&serv_adr, sizeof(serv_adr))==-1)
-		error_handling("bind() error");
-
-	while(1) 
-	{
-		clnt_adr_sz=sizeof(clnt_adr);
-		str_len=recvfrom(serv_sock, message, BUF_SIZE, 0, 
-								(struct sockaddr*)&clnt_adr, &clnt_adr_sz);
-		sendto(serv_sock, message, str_len, 0, 
-								(struct sockaddr*)&clnt_adr, clnt_adr_sz);
-	}	
-	close(serv_sock);
-	return 0;
-}
-
-void error_handling(char *message)
-{
-	fputs(message, stderr);
-	fputc('\n', stderr);
-	exit(1);
-}
-
-  
-  
-  
+이상입니다 감사합니다.
